@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { KavenegarApi } from "./kavenegarApi";
 
 const apiKey = process.env.KAVENEGAR_API_TOKEN;
+const timezoneOffset = parseFloat(process.env.TIMEZONE_OFFSET || "0");
 
 const kavenegarApi = new KavenegarApi({
 	apiKey: apiKey || 0,
@@ -13,7 +14,9 @@ describe("kavenegarApi", () => {
 	it("test connection", async () => {
 		const getDateResponse = await kavenegarApi.getDate();
 
-		const date = new Date((getDateResponse.unixtime - 3.5 * 60 * 60) * 1000);
+		const date = new Date(
+			(getDateResponse.unixtime + timezoneOffset * 60 * 60) * 1000
+		);
 
 		expect(getDateResponse.year).toBe(date.getFullYear());
 		expect(getDateResponse.month).toBe(date.getMonth() + 1);
