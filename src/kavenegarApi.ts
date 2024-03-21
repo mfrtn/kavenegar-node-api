@@ -8,9 +8,16 @@ import {
 	SendParams,
 	MessageResponse,
 	SendArrayParams,
-	StatusParams,
 	StatusResponse,
 	ResponseResult,
+	StatusByLocalIdResponse,
+	MessageIdParams,
+	StatusByLocalIdParams,
+	SelectOutboxParams,
+	GetDateResponse,
+	LatestOutboxParams,
+	CountOutboxParams,
+	CountOutboxResponse,
 } from "./types";
 
 export class KavenegarApi {
@@ -105,6 +112,10 @@ export class KavenegarApi {
 		});
 	}
 
+	async getDate(): Promise<GetDateResponse> {
+		return await this.request<GetDateResponse>("utils", "getdate");
+	}
+
 	async send(data: SendParams): Promise<MessageResponse[]> {
 		return await this.request<MessageResponse[]>("sms", "send", data);
 	}
@@ -113,32 +124,42 @@ export class KavenegarApi {
 		return await this.request<MessageResponse[]>("sms", "sendarray", data);
 	}
 
-	async status(data: StatusParams): Promise<StatusResponse[]> {
+	async status(data: MessageIdParams): Promise<StatusResponse[]> {
 		return await this.request<StatusResponse[]>("sms", "status", data);
 	}
 
-	async statusLocalMessageId(data: RequestParams): Promise<any> {
-		return await this.request("sms", "statuslocalmessageid", data);
+	async statusLocalMessageId(
+		data: StatusByLocalIdParams
+	): Promise<StatusByLocalIdResponse[]> {
+		return await this.request<StatusByLocalIdResponse[]>(
+			"sms",
+			"statuslocalmessageid",
+			data
+		);
 	}
 
-	async select(data: RequestParams): Promise<any> {
-		return await this.request("sms", "select", data);
+	async select(data: MessageIdParams): Promise<MessageResponse[]> {
+		return await this.request<MessageResponse[]>("sms", "select", data);
 	}
 
-	async selectOutbox(data: RequestParams): Promise<any> {
-		return await this.request("sms", "selectoutbox", data);
+	async selectOutbox(data: SelectOutboxParams): Promise<MessageResponse[]> {
+		return await this.request<MessageResponse[]>("sms", "selectoutbox", data);
 	}
 
-	async latestOutbox(data: RequestParams): Promise<any> {
-		return await this.request("sms", "latestoutbox", data);
+	async latestOutbox(data: LatestOutboxParams): Promise<MessageResponse[]> {
+		return await this.request<MessageResponse[]>("sms", "latestoutbox", data);
 	}
 
-	async countOutbox(data: RequestParams): Promise<any> {
-		return await this.request("sms", "countoutbox", data);
+	async countOutbox(data: CountOutboxParams): Promise<CountOutboxResponse[]> {
+		return await this.request<CountOutboxResponse[]>(
+			"sms",
+			"countoutbox",
+			data
+		);
 	}
 
-	async cancel(data: RequestParams): Promise<any> {
-		return await this.request("sms", "cancel", data);
+	async cancel(data: MessageIdParams): Promise<StatusResponse[]> {
+		return await this.request<StatusResponse[]>("sms", "cancel", data);
 	}
 
 	async receive(data: RequestParams): Promise<any> {

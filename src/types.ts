@@ -11,6 +11,8 @@ export type ResponseResult<T> = {
 	entries: T;
 	return: { status: number; message: string };
 };
+
+/************ Request Params Types ************/
 export type RequestParams = {
 	[key: string]: any;
 };
@@ -19,9 +21,9 @@ export type SendParams = {
 	receptor: string;
 	message: string;
 	sender?: string;
-	date?: Date;
-	type?: "0" | "1" | "2" | "3";
-	localid?: string;
+	date?: number;
+	type?: number[];
+	localid?: number;
 	hide?: 1;
 };
 
@@ -29,19 +31,52 @@ export type SendArrayParams = {
 	receptor: string[];
 	message: string[];
 	sender: string[];
-	date?: Date;
+	date?: number;
 	type?: number[];
 	localmessageids?: number[];
 	hide?: 1;
 };
 
-export type StatusParams = {
+export type MessageIdParams = {
 	messageid: number | number[];
+};
+
+export type StatusByLocalIdParams = {
+	localid: number | number[];
+};
+
+export type SelectOutboxParams = {
+	startdate: number;
+	enddate?: number;
+	sender?: string;
+};
+
+export type LatestOutboxParams = {
+	pagesize: number;
+	sender: string;
+};
+
+export type CountOutboxParams = {
+	startdate: number;
+	enddate?: number;
+	status?: number;
+};
+
+/************ Responses Params Types ************/
+export type GetDateResponse = {
+	datetime: string;
+	year: number;
+	month: number;
+	day: number;
+	hour: number;
+	minute: number;
+	second: number;
+	unixtime: number;
 };
 
 export type MessageResponse = {
 	messageid: number;
-	message: number;
+	message: string;
 	status: number;
 	statustext: string;
 	sender: string;
@@ -54,4 +89,16 @@ export type StatusResponse = {
 	messageid: number;
 	status: number;
 	statustext: string;
+};
+
+export type StatusByLocalIdResponse = StatusResponse & {
+	localid: number;
+};
+
+export type CountOutboxResponse = {
+	startdate: number;
+	enddate: number;
+	sumpart: number;
+	sumcount: number;
+	cost: number;
 };
