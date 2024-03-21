@@ -10,6 +10,7 @@ import {
 	SendArrayParams,
 	StatusParams,
 	StatusResponse,
+	ResponseResult,
 } from "./types";
 
 export class KavenegarApi {
@@ -59,7 +60,7 @@ export class KavenegarApi {
 
 				res.on("end", () => {
 					try {
-						const jsonObject = JSON.parse(result);
+						const jsonObject: ResponseResult<T> = JSON.parse(result);
 						if (
 							res.statusCode &&
 							res.statusCode >= 200 &&
@@ -80,7 +81,6 @@ export class KavenegarApi {
 								description: "Exception occurred",
 							});
 						} else {
-							// Handle the case where 'e' is not an Error
 							reject({
 								message: "Unknown error occurred",
 								status: 500,

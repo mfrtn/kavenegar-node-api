@@ -1,13 +1,16 @@
-export type KavenegarApiOptions = {
-	host?: string;
-	version?: string;
-	apiKey: string | 0;
-};
-
 export type KavenegarConfigs = {
 	apiKey: string | 0;
 };
 
+export type KavenegarApiOptions = {
+	host?: string;
+	version?: string;
+} & KavenegarConfigs;
+
+export type ResponseResult<T> = {
+	entries: T;
+	return: { status: number; message: string };
+};
 export type RequestParams = {
 	[key: string]: any;
 };
