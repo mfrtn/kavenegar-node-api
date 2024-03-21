@@ -11,6 +11,8 @@
     "dist"
   ],
   "scripts": {
+    "dev": "vitest",
+    "test": "vitest run",
     "build": "tsup ./src/index.ts --format cjs,esm --dts",
     "lint": "tsc"
   },
@@ -35,6 +37,7 @@
   "devDependencies": {
     "@types/node": "^20.11.30",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   }
 }
