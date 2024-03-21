@@ -1,21 +1,43 @@
 {
 	"compilerOptions": {
-		"target": "ES2016" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+		/* Visit https://aka.ms/tsconfig to read more about this file */
+
+		/* Language and Environment */
+		"target": "es2016" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+		"lib": [
+			"es5",
+			"ES2015",
+			"ES2015.Collection",
+			"dom",
+			"ES2016"
+		] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
+
+		/* Modules */
 		"module": "CommonJS" /* Specify what module code is generated. */,
-		"lib": ["es5", "ES2015", "ES2015.Collection", "dom", "ES2016"],
-		"declaration": true,
-		"declarationMap": true,
-		"sourceMap": true,
-		"outDir": "dist",
-		"moduleResolution": "Node",
-		"strictNullChecks": true,
+		"rootDir": "./src" /* Specify the root folder within your source files. */,
+		"moduleResolution": "Node" /* Specify how TypeScript looks up a file from a given module specifier. */,
+
+		/* Emit */
+		"declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project. */,
+		"declarationMap": true /* Create sourcemaps for d.ts files. */,
+		"sourceMap": true /* Create source map files for emitted JavaScript files. */,
+		"outDir": "./dist" /* Specify an output folder for all emitted files. */,
+		"removeComments": true /* Disable emitting comments. */,
+		"noEmit": true /* Disable emitting files from a compilation. */,
+
+		/* Interop Constraints */
 		"esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
 		"forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+
+		/* Type Checking */
 		"strict": true /* Enable all strict type-checking options. */,
-		"skipLibCheck": true /* Skip type checking all .d.ts files. */,
-		"noUncheckedIndexedAccess": true,
-		"noEmit": true
-	},
-	"include": ["src/**/*.ts"],
-	"exclude": ["node_modules", "dist"]
+		// "noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied 'any' type. */,
+		"strictNullChecks": true /* When type checking, take into account 'null' and 'undefined'. */,
+		"noUnusedLocals": true /* Enable error reporting when local variables aren't read. */,
+		"noUnusedParameters": true /* Raise an error when a function parameter isn't read. */,
+		"noUncheckedIndexedAccess": true /* Add 'undefined' to a type when accessed using an index. */,
+
+		/* Completeness */
+		"skipLibCheck": true /* Skip type checking all .d.ts files. */
+	}
 }
