@@ -69,5 +69,33 @@ describe("kavenegarApi", () => {
 			expect(cancelRequest[0]?.messageid).toBe(messages[0]?.messageid);
 			expect(cancelRequest[0]?.statustext).toBe("لغو شده");
 		});
+
+		it("test receive", async () => {
+			const receiveRequest = await kavenegarApi.receive({
+				linenumber: "10007700044000",
+				isread: 1,
+			});
+
+			expect(receiveRequest[0]?.messageid).toBe(797866275);
+			expect(receiveRequest[0]?.message).toBe("تست");
+		});
+
+		it("test account info", async () => {
+			const accountInfo = await kavenegarApi.accountInfo();
+
+			expect(accountInfo.type).toBe("Master");
+			expect(accountInfo.expiredate).toBeTypeOf("number");
+			expect(accountInfo.remaincredit).toBeTypeOf("number");
+		});
+
+		it("test account configs", async () => {
+			const debugmode = "enabled";
+			const accountConfigs = await kavenegarApi.accountConfig({
+				debugmode,
+			});
+
+			expect(accountConfigs.debugmode).toBe(debugmode);
+			expect(accountConfigs.dailyreport).toBe("disabled");
+		});
 	}
 });

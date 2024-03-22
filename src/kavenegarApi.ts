@@ -18,6 +18,13 @@ import {
 	LatestOutboxParams,
 	CountOutboxParams,
 	CountOutboxResponse,
+	ReceiveParams,
+	ReceiveResponse,
+	CountInboxParams,
+	VerifyLookupParams,
+	AccountInfoResponse,
+	CallMakeTTSParams,
+	AccountConfigs,
 } from "./types";
 
 export class KavenegarApi {
@@ -29,13 +36,6 @@ export class KavenegarApi {
 			version: "v1",
 			apiKey,
 		};
-		this.request("utils", "getdate")
-			.then(() => {
-				console.log("Connected to Kavenegar server", "KavenegarApi");
-			})
-			.catch(() => {
-				console.error("error to connect to Kavenegar server", "KavenegarApi");
-			});
 	}
 
 	private request<T>(
@@ -162,35 +162,33 @@ export class KavenegarApi {
 		return await this.request<StatusResponse[]>("sms", "cancel", data);
 	}
 
-	async receive(data: RequestParams): Promise<any> {
-		return await this.request("sms", "receive", data);
+	async receive(data: ReceiveParams): Promise<ReceiveResponse[]> {
+		return await this.request<ReceiveResponse[]>("sms", "receive", data);
 	}
 
-	async countInbox(data: RequestParams): Promise<any> {
-		return await this.request("sms", "countinbox", data);
+	async countInbox(data: CountInboxParams): Promise<CountOutboxResponse[]> {
+		return await this.request<CountOutboxResponse[]>("sms", "countinbox", data);
 	}
 
-	async countPostalCode(data: RequestParams): Promise<any> {
-		return await this.request("sms", "countpostalcode", data);
+	async verifyLookup(data: VerifyLookupParams): Promise<MessageResponse> {
+		return await this.request<MessageResponse>("verify", "lookup", data);
 	}
 
-	async sendByPostalCode(data: RequestParams): Promise<any> {
-		return await this.request("sms", "sendbypostalcode", data);
+	async accountInfo(): Promise<AccountInfoResponse> {
+		return await this.request<AccountInfoResponse>("account", "info");
 	}
 
-	async verifyLookup(data: RequestParams): Promise<any> {
-		return await this.request("verify", "lookup", data);
+	async accountConfig(
+		data?: AccountConfigs
+	): Promise<Required<AccountConfigs>> {
+		return await this.request<Required<AccountConfigs>>(
+			"account",
+			"config",
+			data
+		);
 	}
 
-	async accountInfo(): Promise<any> {
-		return await this.request("account", "info");
-	}
-
-	async accountConfig(data: RequestParams): Promise<any> {
-		return await this.request("account", "config", data);
-	}
-
-	async callMakeTTS(data: RequestParams): Promise<any> {
-		return await this.request("call", "maketts", data);
+	async callMakeTTS(data: CallMakeTTSParams): Promise<MessageResponse> {
+		return await this.request<MessageResponse>("call", "maketts", data);
 	}
 }

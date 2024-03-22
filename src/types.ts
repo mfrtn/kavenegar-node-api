@@ -12,11 +12,6 @@ export type ResponseResult<T> = {
 	return: { status: number; message: string };
 };
 
-/************ Request Params Types ************/
-export type RequestParams = {
-	[key: string]: any;
-};
-
 export type SendParams = {
 	receptor: string;
 	message: string;
@@ -62,6 +57,58 @@ export type CountOutboxParams = {
 	status?: number;
 };
 
+export type ReceiveParams = {
+	linenumber: string;
+	isread: 1 | 0;
+};
+
+export type CountInboxParams = {
+	startdate: number;
+	enddate?: number;
+	linenumber: string;
+	isread: 1 | 0;
+};
+
+export type VerifyLookupParams = {
+	receptor: string;
+	token: string;
+	token2?: string;
+	token3?: string;
+	template: string;
+	type?: "sms" | "call";
+};
+
+export type CallMakeTTSParams = {
+	receptor: string;
+	message: string;
+	date?: number;
+	localid?: number;
+	// repeat?: number;
+};
+
+export type AccountConfigs = {
+	apilogs?: "justfaults" | "enabled" | "disabled";
+	dailyreport?: "enabled" | "disabled";
+	debugmode?: "enabled" | "disabled";
+	defaultsender?: string;
+	mincreditalarm?: number;
+	resendfailed?: "enable" | "disabled";
+};
+
+export type RequestParams =
+	| SendParams
+	| SendArrayParams
+	| MessageIdParams
+	| StatusByLocalIdParams
+	| SelectOutboxParams
+	| LatestOutboxParams
+	| CountOutboxParams
+	| ReceiveParams
+	| CountInboxParams
+	| VerifyLookupParams
+	| CallMakeTTSParams
+	| AccountConfigs;
+
 /************ Responses Params Types ************/
 export type GetDateResponse = {
 	datetime: string;
@@ -91,8 +138,11 @@ export type StatusResponse = {
 	statustext: string;
 };
 
-export type StatusByLocalIdResponse = StatusResponse & {
+export type StatusByLocalIdResponse = {
+	messageid: number;
 	localid: number;
+	status: number;
+	statustext: string;
 };
 
 export type CountOutboxResponse = {
@@ -101,4 +151,24 @@ export type CountOutboxResponse = {
 	sumpart: number;
 	sumcount: number;
 	cost: number;
+};
+
+export type ReceiveResponse = {
+	messageid: number;
+	message: string;
+	sender: string;
+	receptor: string;
+	date: number;
+};
+
+export type CountInboxResponse = {
+	startdate: number;
+	enddate: number;
+	sumcount: number;
+};
+
+export type AccountInfoResponse = {
+	remaincredit: number;
+	expiredate: number;
+	type: "Child" | "Master";
 };
