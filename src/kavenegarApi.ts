@@ -1,5 +1,5 @@
-import * as https from "https";
-import * as querystring from "querystring";
+import { request as httpsRequest, RequestOptions } from "https";
+import { stringify } from "querystring";
 
 import {
 	KavenegarApiOptions,
@@ -46,8 +46,8 @@ export class KavenegarApi {
 		return new Promise((resolve, reject) => {
 			const path = `/${this.options.version}/${this.options.apiKey}/${action}/${method}.json`;
 
-			const postData = querystring.stringify(params);
-			const postRequestOptions: https.RequestOptions = {
+			const postData = stringify(params);
+			const postRequestOptions: RequestOptions = {
 				host: this.options.host,
 				port: "443",
 				path: path,
@@ -58,7 +58,7 @@ export class KavenegarApi {
 				},
 			};
 
-			const req = https.request(postRequestOptions, (res) => {
+			const req = httpsRequest(postRequestOptions, (res) => {
 				res.setEncoding("utf8");
 				let result = "";
 				res.on("data", (data) => {
