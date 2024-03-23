@@ -1,4 +1,4 @@
-import { request as httpsRequest, RequestOptions } from "https";
+import { request, RequestOptions } from "https";
 import { stringify } from "querystring";
 
 import {
@@ -38,33 +38,30 @@ export class KavenegarApi {
 		};
 	}
 
-	private request<T>(
+	private async sendReq<T>(
 		action: string,
 		method: string,
 		params?: RequestParams
 	): Promise<T> {
+		const postData = stringify(params);
+		const postRequestOptions: RequestOptions = {
+			host: this.options.host,
+			port: "443",
+			path: `/${this.options.version}/${this.options.apiKey}/${action}/${method}.json`,
+			method: "POST",
+			headers: {
+				"Content-Length": Buffer.byteLength(postData),
+				"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+			},
+		};
+
 		return new Promise((resolve, reject) => {
-			const path = `/${this.options.version}/${this.options.apiKey}/${action}/${method}.json`;
-
-			const postData = stringify(params);
-			const postRequestOptions: RequestOptions = {
-				host: this.options.host,
-				port: "443",
-				path: path,
-				method: "POST",
-				headers: {
-					"Content-Length": Buffer.byteLength(postData),
-					"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-				},
-			};
-
-			const req = httpsRequest(postRequestOptions, (res) => {
-				res.setEncoding("utf8");
+			const req = request(postRequestOptions, (res) => {
 				let result = "";
+				res.setEncoding("utf8");
 				res.on("data", (data) => {
 					result += data;
 				});
-
 				res.on("end", () => {
 					try {
 						const jsonObject: ResponseResult<T> = JSON.parse(result);
@@ -98,8 +95,6 @@ export class KavenegarApi {
 				});
 			});
 
-			req.write(postData, "utf8");
-
 			req.on("error", (e) => {
 				reject({
 					error: e.message,
@@ -108,30 +103,31 @@ export class KavenegarApi {
 				});
 			});
 
+			req.write(postData, "utf8");
 			req.end();
 		});
 	}
 
 	async getDate(): Promise<GetDateResponse> {
-		return await this.request<GetDateResponse>("utils", "getdate");
+		return this.sendReq<GetDateResponse>("utils", "getdate");
 	}
 
 	async send(data: SendParams): Promise<MessageResponse[]> {
-		return await this.request<MessageResponse[]>("sms", "send", data);
+		return this.sendReq<MessageResponse[]>("sms", "send", data);
 	}
 
 	async sendArray(data: SendArrayParams): Promise<MessageResponse[]> {
-		return await this.request<MessageResponse[]>("sms", "sendarray", data);
+		return this.sendReq<MessageResponse[]>("sms", "sendarray", data);
 	}
 
 	async status(data: MessageIdParams): Promise<StatusResponse[]> {
-		return await this.request<StatusResponse[]>("sms", "status", data);
+		return this.sendReq<StatusResponse[]>("sms", "status", data);
 	}
 
 	async statusLocalMessageId(
 		data: StatusByLocalIdParams
 	): Promise<StatusByLocalIdResponse[]> {
-		return await this.request<StatusByLocalIdResponse[]>(
+		return this.sendReq<StatusByLocalIdResponse[]>(
 			"sms",
 			"statuslocalmessageid",
 			data
@@ -139,56 +135,48 @@ export class KavenegarApi {
 	}
 
 	async select(data: MessageIdParams): Promise<MessageResponse[]> {
-		return await this.request<MessageResponse[]>("sms", "select", data);
+		return this.sendReq<MessageResponse[]>("sms", "select", data);
 	}
 
 	async selectOutbox(data: SelectOutboxParams): Promise<MessageResponse[]> {
-		return await this.request<MessageResponse[]>("sms", "selectoutbox", data);
+		return this.sendReq<MessageResponse[]>("sms", "selectoutbox", data);
 	}
 
 	async latestOutbox(data: LatestOutboxParams): Promise<MessageResponse[]> {
-		return await this.request<MessageResponse[]>("sms", "latestoutbox", data);
+		return this.sendReq<MessageResponse[]>("sms", "latestoutbox", data);
 	}
 
 	async countOutbox(data: CountOutboxParams): Promise<CountOutboxResponse[]> {
-		return await this.request<CountOutboxResponse[]>(
-			"sms",
-			"countoutbox",
-			data
-		);
+		return this.sendReq<CountOutboxResponse[]>("sms", "countoutbox", data);
 	}
 
 	async cancel(data: MessageIdParams): Promise<StatusResponse[]> {
-		return await this.request<StatusResponse[]>("sms", "cancel", data);
+		return this.sendReq<StatusResponse[]>("sms", "cancel", data);
 	}
 
 	async receive(data: ReceiveParams): Promise<ReceiveResponse[]> {
-		return await this.request<ReceiveResponse[]>("sms", "receive", data);
+		return this.sendReq<ReceiveResponse[]>("sms", "receive", data);
 	}
 
 	async countInbox(data: CountInboxParams): Promise<CountOutboxResponse[]> {
-		return await this.request<CountOutboxResponse[]>("sms", "countinbox", data);
+		return this.sendReq<CountOutboxResponse[]>("sms", "countinbox", data);
 	}
 
 	async verifyLookup(data: VerifyLookupParams): Promise<MessageResponse> {
-		return await this.request<MessageResponse>("verify", "lookup", data);
+		return this.sendReq<MessageResponse>("verify", "lookup", data);
 	}
 
 	async accountInfo(): Promise<AccountInfoResponse> {
-		return await this.request<AccountInfoResponse>("account", "info");
+		return this.sendReq<AccountInfoResponse>("account", "info");
 	}
 
 	async accountConfig(
 		data?: AccountConfigs
 	): Promise<Required<AccountConfigs>> {
-		return await this.request<Required<AccountConfigs>>(
-			"account",
-			"config",
-			data
-		);
+		return this.sendReq<Required<AccountConfigs>>("account", "config", data);
 	}
 
 	async callMakeTTS(data: CallMakeTTSParams): Promise<MessageResponse> {
-		return await this.request<MessageResponse>("call", "maketts", data);
+		return this.sendReq<MessageResponse>("call", "maketts", data);
 	}
 }
