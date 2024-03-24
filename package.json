@@ -1,6 +1,6 @@
 {
   "name": "kavenegar-api",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "kavenegar sms provider api",
   "author": "Mohammad Foroutan",
   "license": "ISC",
@@ -15,7 +15,8 @@
     "test": "vitest run",
     "build": "tsup ./src/index.ts --format cjs,esm --dts",
     "lint": "tsc",
-    "ci": "npm run lint && npm run test && npm run build"
+    "ci": "npm run lint && npm run test && npm run build",
+    "publish": "npm run lint && npm run build && npx changeset publish"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
     "url": "https://github.com/mfrtn/kavenegar-node-api/issues"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@types/node": "^20.11.30",
     "dotenv": "^16.4.5",
     "tsup": "^8.0.2",
