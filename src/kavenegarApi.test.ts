@@ -37,6 +37,20 @@ describe("kavenegarApi", () => {
 			expect(messages[0]?.receptor).toBe(receptor);
 		});
 
+		it("test send message to multiple receptors", async () => {
+			const message = "salam";
+			const receptor = ["09300000000", "09123004001"];
+			const messages = await kavenegarApi.send({
+				message,
+				receptor,
+			});
+
+			expect(messages[0]?.message).toBe(message);
+			expect(messages[0]?.receptor).toBe(receptor[0]);
+			expect(messages[1]?.message).toBe(message);
+			expect(messages[1]?.receptor).toBe(receptor[1]);
+		});
+
 		it("test count outbox", async () => {
 			const now = new Date();
 			const startdate = Math.floor((now.getTime() - 10000) / 1000);

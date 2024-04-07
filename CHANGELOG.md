@@ -1,7 +1,7 @@
 # kavenegar-api
 
-## 0.0.4
+## 0.1.0
 
-### Patch Changes
+### Minor Changes
 
-- update document
+- fix some types and new test

@@ -13,7 +13,7 @@ export type ResponseResult<T> = {
 };
 
 export type SendParams = {
-	receptor: string;
+	receptor: string | string[];
 	message: string;
 	sender?: string;
 	date?: number;
